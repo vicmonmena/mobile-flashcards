@@ -55,4 +55,13 @@ npm start
 },
 ```
 
-## Notes
+## Folders
+
+### `components`
+
+All this project contents for UI
+
+### `utils`
+
+- `colors.js`: color names in RGB code
+- `helpers.js`: AsyncStorage operations
