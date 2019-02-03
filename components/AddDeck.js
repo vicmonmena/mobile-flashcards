@@ -1,13 +1,54 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, Platform } from 'react-native'
-import { white } from '../utils/colors'
+import { NavigationActions } from 'react-navigation'
+import { white, cyberGrape } from '../utils/colors'
+import { saveDeckTitle } from './../utils/helpers'
+import SubmitButton from './SubmitButton'
+import InputText from './InputText'
 
 class AddDeck extends Component {
 
+  state = {
+    title: '',
+    error: false
+  }
+
+  handleChange = (text) => {
+    this.setState({
+      title: text
+    })
+  }
+
+  submit = () => {
+    if (this.state.title !== '') {
+      // Bac to Deck VIew
+      this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
+      saveDeckTitle(this.state.title)
+    } else {
+      this.setState({
+        error: true
+      })
+    }
+  }
+
   render () {
+    const { title , error} = this.state
     return (
       <View style={styles.item}>
-        <Text>Add Deck</Text>
+        <Text>What is the title of your new deck?</Text>
+        <InputText 
+          onChange={this.handleChange}
+          value={title}
+          name='new-deck'
+          placeholder='Title...'
+        />
+        <SubmitButton onPress={this.submit} />
+        { error &&
+          <Text
+            style={styles.error}>
+            Please! Be sure you enter the title ...
+          </Text>
+        }
       </View>
     )
   }
@@ -30,10 +71,8 @@ const styles = StyleSheet.create({
       height: 3
     },
   },
-  noDataText: {
-    fontSize: 20,
-    paddingTop: 20,
-    paddingBottom: 20
+  error: {
+    color: cyberGrape
   }
 })
 

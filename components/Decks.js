@@ -1,13 +1,53 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Platform } from 'react-native'
+import { View, Text, StyleSheet, Platform, TouchableOpacity} from 'react-native'
+import { getDecks } from './../utils/helpers'
 import { white } from '../utils/colors'
 
 class Decks extends Component {
 
-  render () {
+  state = {
+    deckList: []
+  }
+
+  componentDidMount() {
+    getDecks().then((items) => {
+      this.setState({
+        deckList: items
+      })
+    })
+  }
+
+  deckItem = (deck) => {
+    const { title, questions } = deck
+    const key = Object.keys(deck)[0]
     return (
-      <View style={styles.item}>
-        <Text>Decks</Text>
+      <TouchableOpacity onPress={() => this.props.navigation.navigate(
+        'DeckDetail',
+        { deckId: key }
+      )}>
+        <Text>{title}</Text>
+        <Text>{questions.length} Cards</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  render () {
+    const { deckList } = this.state
+
+    if (deckList !== null && deckList.length > 0) {
+      return (
+        <View style={styles.item}>
+          <Text>Decks</Text>
+          <FlatList
+            data={deckList}
+            renderItem={({item}) => deckItem(item)}
+          />
+        </View>
+      )
+    }
+    return (
+      <View>
+        <Text>There are no Decks! Come on, Let's create one!</Text>
       </View>
     )
   }

@@ -8,6 +8,7 @@ class DeckDetails extends Component {
     return (
       <View style={styles.item}>
         <Text>Deck Details</Text>
+        <Text>{JSON.stringify(this.props.navigation.state.params.deckId)}</Text>
       </View>
     )
   }

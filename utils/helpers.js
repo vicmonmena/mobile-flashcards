@@ -1,7 +1,12 @@
 import { AsyncStorage } from 'react-native'
 const MOBILE_FLASHCARDS_KEY = 'MobileFlashcards::decks'
 
-const getKeyFromTitle = (title) => (title.trim())
+const getKeyFromTitle = (title) => {
+  const keys = title.trim().split(' ').map(str => (
+    str.charAt(0).toUpperCase()
+  ))
+  return keys.join('')
+}
 
 /**
  * Return all of the decks along with their titles, questions, and answers. 
@@ -11,6 +16,7 @@ const getKeyFromTitle = (title) => (title.trim())
  */
 export function getDecks () {
   return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
+    .then((items) =>(JSON.parse(items)))
 }
 
 /**
@@ -37,7 +43,7 @@ export function getDeck (title) {
  */
 export function saveDeckTitle (title) {
   return AsyncStorage.mergeItem(MOBILE_FLASHCARDS_KEY, JSON.stringify({
-    [id]: {
+    [getKeyFromTitle(title)]: {
       title,
       questions: []
     }
