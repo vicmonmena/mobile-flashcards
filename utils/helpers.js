@@ -1,6 +1,8 @@
 import { AsyncStorage } from 'react-native'
 const MOBILE_FLASHCARDS_KEY = 'MobileFlashcards::decks'
 
+const getKeyFromTitle = (title) => (title.trim())
+
 /**
  * Return all of the decks along with their titles, questions, and answers. 
  *
@@ -18,11 +20,12 @@ export function getDecks () {
  * @param {*} id
  * @returns
  */
-export function getDeck (id) {
-  return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY).then((items) => {
-    const data = JSON.parse(results)
-    return data[id]
-  })
+export function getDeck (title) {
+  return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
+    .then((items) => {
+      const data = JSON.parse(items)
+      return data[getKeyFromTitle(title)]
+    })
 }
 
 /**
@@ -33,7 +36,12 @@ export function getDeck (id) {
  * @returns
  */
 export function saveDeckTitle (title) {
-  return true
+  return AsyncStorage.mergeItem(MOBILE_FLASHCARDS_KEY, JSON.stringify({
+    [id]: {
+      title,
+      questions: []
+    }
+  }))
 }
 
 /**
@@ -45,5 +53,10 @@ export function saveDeckTitle (title) {
  * @returns
  */
 export function addCardToDeck (title, card) {
-  return true
+  return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
+    .then((items) => {
+      const data = JSON.parse(items)
+      data[getKeyFromTitle(title)].questions.concat([card])
+      AsyncStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data))
+    })
 }
