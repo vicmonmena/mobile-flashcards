@@ -27,7 +27,6 @@ class Decks extends Component {
   }
 
   deckItem = (deck) => {
-    console.log(deck)
     const { title, questions, key } = deck
     return (
       <View style={styles.item}>
@@ -44,7 +43,6 @@ class Decks extends Component {
 
   render () {
     const { deckList } = this.state
-    console.log('deckList: ', deckList)
     if (deckList && deckList.length > 0) {
       return (
         <View style={styles.container} >

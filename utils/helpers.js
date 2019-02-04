@@ -23,14 +23,16 @@ export function getDecks () {
  * Take in a single id argument and return the deck associated with that id.
  *
  * @export
- * @param {*} id
+ * @param {*} key
  * @returns
  */
-export function getDeck (title) {
+export function getDeck (key) {
   return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
     .then((items) => {
       const data = JSON.parse(items)
-      return data[getKeyFromTitle(title)]
+      console.log('items: ', items)
+      console.log('data[key]: ', data[key])
+      return data[key]
     })
 }
 
@@ -54,15 +56,15 @@ export function saveDeckTitle (title) {
  * Take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
  *
  * @export
- * @param {*} title
+ * @param {*} key
  * @param {*} card
  * @returns
  */
-export function addCardToDeck (title, card) {
+export function addCardToDeck (key, card) {
   return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
     .then((items) => {
       const data = JSON.parse(items)
-      data[getKeyFromTitle(title)].questions.concat([card])
+      data[key].questions.concat([card])
       AsyncStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data))
     })
 }

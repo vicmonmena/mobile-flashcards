@@ -17,8 +17,8 @@ class DeckDetails extends Component {
     })))
   }
 
-  shouldComponentUpdate(nextProps) {
-    return this.state.deck !== undefined
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.deck !== nextState.deck
   }
 
   render () {
