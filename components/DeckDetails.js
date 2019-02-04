@@ -1,41 +1,52 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, Platform } from 'react-native'
 import { white } from '../utils/colors'
+import { getDeck } from './../utils/helpers'
 
 class DeckDetails extends Component {
 
+  state = {
+    deck: undefined
+  }
+
+  componentDidMount() {
+    // TODO: Fetch deck from state by using Redux instead Asyncstorage
+    const { deckId } = this.props.navigation.state.params
+    getDeck(deckId).then((item) => (this.setState({
+      deck: item
+    })))
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.state.deck !== undefined
+  }
+
   render () {
-    return (
-      <View style={styles.item}>
-        <Text>Deck Details</Text>
-        <Text>{JSON.stringify(this.props.navigation.state.params.deckId)}</Text>
-      </View>
-    )
+    const { deckId } = this.props.navigation.state.params
+    const { deck } = this.state
+    if (deck) {
+      return (
+        <View style={styles.container}>
+          <Text>{deck.title}</Text>
+          <Text>{deck.questions ? deck.questions.length : 0} Cards</Text>
+        </View>
+      )
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text>Loading ...</Text>
+        </View>
+      )
+    }
   }
 }
 
 const styles = StyleSheet.create({
-  item: {
+  container: {
+    flex: 1,
     backgroundColor: white,
-    borderRadius: Platform.OS === 'ios' ? 16 : 2,
-    padding: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 17,
-    justifyContent: 'center',
-    shadowRadius: 3,
-    shadowOpacity: 0.8,
-    shadowColor: 'rgba(0, 0, 0, 0.24)',
-    shadowOffset: {
-      width: 0,
-      height: 3
-    },
+    padding: 15,
   },
-  noDataText: {
-    fontSize: 20,
-    paddingTop: 20,
-    paddingBottom: 20
-  }
 })
 
 export default DeckDetails

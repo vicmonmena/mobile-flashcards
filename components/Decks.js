@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Platform, TouchableOpacity} from 'react-native'
+import { 
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+  FlatList
+} from 'react-native'
 import { getDecks } from './../utils/helpers'
 import { white } from '../utils/colors'
 
@@ -11,49 +18,58 @@ class Decks extends Component {
 
   componentDidMount() {
     getDecks().then((items) => {
+      // console.log('items: ', items)
+      const deckList = Object.keys(items).map((key) => (Object.assign({}, items[key], { key })))
       this.setState({
-        deckList: items
+        deckList
       })
     })
   }
 
   deckItem = (deck) => {
-    const { title, questions } = deck
-    const key = Object.keys(deck)[0]
+    console.log(deck)
+    const { title, questions, key } = deck
     return (
-      <TouchableOpacity onPress={() => this.props.navigation.navigate(
-        'DeckDetail',
-        { deckId: key }
-      )}>
-        <Text>{title}</Text>
-        <Text>{questions.length} Cards</Text>
-      </TouchableOpacity>
+      <View style={styles.item}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate(
+          'DeckDetails',
+          { deckId: key }
+        )}>
+          <Text>{title}</Text>
+          <Text>{questions ? questions.length : 0} Cards</Text>
+        </TouchableOpacity>
+      </View>
     )
   }
 
   render () {
     const { deckList } = this.state
-
-    if (deckList !== null && deckList.length > 0) {
+    console.log('deckList: ', deckList)
+    if (deckList && deckList.length > 0) {
       return (
-        <View style={styles.item}>
-          <Text>Decks</Text>
+        <View style={styles.container} >
           <FlatList
             data={deckList}
-            renderItem={({item}) => deckItem(item)}
+            renderItem={({item}) => this.deckItem(item)}
           />
         </View>
       )
     }
     return (
       <View>
-        <Text>There are no Decks! Come on, Let's create one!</Text>
+        <Text>There are no Decks! C'mon, Let's create one!</Text>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: white,
+    padding: 15,
+    overflow: 'hidden'
+  },
   item: {
     backgroundColor: white,
     borderRadius: Platform.OS === 'ios' ? 16 : 2,
