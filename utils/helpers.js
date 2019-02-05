@@ -8,6 +8,10 @@ const getKeyFromTitle = (title) => {
   return keys.join('')
 }
 
+export const formatDate = (date) => {
+  return date.getUTCFullYear() +"/"+ (date.getUTCMonth()+1) +"/"+ date.getUTCDate() + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + ":" + date.getUTCSeconds();
+}
+
 export const clearAsyncStorage = () => {
   AsyncStorage.clear()
 }

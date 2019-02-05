@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { AppLoading } from 'expo'
 import { withNavigationFocus } from 'react-navigation'
-import { getDecks, clearAsyncStorage } from './../utils/helpers'
+import { getDecks, clearAsyncStorage, formatDate } from './../utils/helpers'
 import { white } from '../utils/colors'
 
 class Decks extends Component {
@@ -22,14 +22,6 @@ class Decks extends Component {
 
   componentDidMount() {
     this.fetchDecks()
-    this.props.navigation.addListener('didFocus', () => {
-      console.log('fetchDecks')
-      this.fetchDecks()
-    })
-  }
-  
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.deck !== nextState.deck
   }
 
   clearAsyncStorage = async() => {
@@ -44,12 +36,11 @@ class Decks extends Component {
   fetchDecks = () => {
     getDecks().then((items) => {
       if (items) {
-        // console.log('items: ', items)
         const deckList = Object.keys(items).map((key) => (Object.assign({}, items[key], { key })))
-        // const sortedList = deckList.sort((deckA,deckB) => deckB.timestamp - deckA.timestamp)
+        const sortedList = deckList.sort((deckA,deckB) => deckB.timestamp - deckA.timestamp)
         this.setState({
           ready: true,
-          deckList
+          deckList: sortedList
         })
       } else {
         this.setState({
@@ -71,7 +62,7 @@ class Decks extends Component {
         )}>
           <Text>{title}</Text>
           <Text>{questions ? questions.length : 0} Cards</Text>
-          <Text>Created at: {date.toISOString()} Cards</Text>
+          <Text>Created at: {formatDate(date)}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -79,7 +70,6 @@ class Decks extends Component {
 
   render () {
     const { deckList, ready } = this.state
-
     if (ready === false) {
       return <AppLoading />
     }
