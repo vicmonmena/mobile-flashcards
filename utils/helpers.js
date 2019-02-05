@@ -8,6 +8,10 @@ const getKeyFromTitle = (title) => {
   return keys.join('')
 }
 
+export const clearAsyncStorage = () => {
+  AsyncStorage.clear()
+}
+
 /**
  * Return all of the decks along with their titles, questions, and answers. 
  *
@@ -30,8 +34,6 @@ export function getDeck (key) {
   return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
     .then((items) => {
       const data = JSON.parse(items)
-      console.log('items: ', items)
-      console.log('data[key]: ', data[key])
       return data[key]
     })
 }
@@ -47,7 +49,8 @@ export function saveDeckTitle (title) {
   return AsyncStorage.mergeItem(MOBILE_FLASHCARDS_KEY, JSON.stringify({
     [getKeyFromTitle(title)]: {
       title,
-      questions: []
+      questions: [],
+      timestamp: Date.now()
     }
   }))
 }
@@ -65,6 +68,16 @@ export function addCardToDeck (key, card) {
     .then((items) => {
       const data = JSON.parse(items)
       data[key].questions.concat([card])
-      AsyncStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data))
+      AsyncStorage.setItem(MOBILE_FLASHCARDS_KEY, JSON.stringify(data))
+    })
+}
+
+export function removeDeck (key) {
+  return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
+    .then((results) => {
+      const data = JSON.parse(results)
+      data[key] = undefined
+      delete data[key]
+      AsyncStorage.setItem(MOBILE_FLASHCARDS_KEY, JSON.stringify(data))
     })
 }

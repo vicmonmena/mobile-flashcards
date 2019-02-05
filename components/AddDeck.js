@@ -21,11 +21,15 @@ class AddDeck extends Component {
 
   submit = () => {
     if (this.state.title !== '') {
-      // Bac to Deck VIew
+      // Bac to Deck View
+      const title = this.state.title
+      this.setState({ title: '' })
       this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
-      saveDeckTitle(this.state.title)
+      saveDeckTitle(title)
     } else {
+      
       this.setState({
+        title: '',
         error: true
       })
     }

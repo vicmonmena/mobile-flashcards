@@ -5,50 +5,92 @@ import {
   StyleSheet,
   Platform,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  Button
 } from 'react-native'
-import { getDecks } from './../utils/helpers'
+import { AppLoading } from 'expo'
+import { withNavigationFocus } from 'react-navigation'
+import { getDecks, clearAsyncStorage } from './../utils/helpers'
 import { white } from '../utils/colors'
 
 class Decks extends Component {
 
   state = {
-    deckList: []
+    deckList: [],
+    ready: false
   }
 
   componentDidMount() {
-    getDecks().then((items) => {
-      // console.log('items: ', items)
-      const deckList = Object.keys(items).map((key) => (Object.assign({}, items[key], { key })))
-      this.setState({
-        deckList
-      })
+    this.fetchDecks()
+    this.props.navigation.addListener('didFocus', () => {
+      console.log('fetchDecks')
+      this.fetchDecks()
     })
   }
+  
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.deck !== nextState.deck
+  }
 
+  clearAsyncStorage = async() => {
+    clearAsyncStorage();
+  }
+
+  /**
+   * Get decks from Asyncstorage
+   *
+   * @memberof Decks
+   */
+  fetchDecks = () => {
+    getDecks().then((items) => {
+      if (items) {
+        // console.log('items: ', items)
+        const deckList = Object.keys(items).map((key) => (Object.assign({}, items[key], { key })))
+        // const sortedList = deckList.sort((deckA,deckB) => deckB.timestamp - deckA.timestamp)
+        this.setState({
+          ready: true,
+          deckList
+        })
+      } else {
+        this.setState({
+          ready: true,
+          deckList: []
+        })
+      }
+
+    })
+  }
+  
   deckItem = (deck) => {
-    const { title, questions, key } = deck
+    const { title, questions, key, timestamp } = deck
+    const date = new Date(timestamp)
     return (
       <View style={styles.item}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate(
-          'DeckDetails',
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('DeckDetails',
           { deckId: key }
         )}>
           <Text>{title}</Text>
           <Text>{questions ? questions.length : 0} Cards</Text>
+          <Text>Created at: {date.toISOString()} Cards</Text>
         </TouchableOpacity>
       </View>
     )
   }
 
   render () {
-    const { deckList } = this.state
+    const { deckList, ready } = this.state
+
+    if (ready === false) {
+      return <AppLoading />
+    }
+
     if (deckList && deckList.length > 0) {
       return (
         <View style={styles.container} >
+          <Button onPress={this.clearAsyncStorage} title='Clear Async Storage' />
           <FlatList
             data={deckList}
-            renderItem={({item}) => this.deckItem(item)}
+            renderItem={({item}) => this.deckItem(item, this.fetchDecks)}
           />
         </View>
       )
@@ -91,4 +133,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Decks
+export default withNavigationFocus(Decks)
