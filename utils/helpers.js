@@ -50,6 +50,7 @@ export function getDeck (key) {
  * @returns
  */
 export function saveDeckTitle (title) {
+  console.log(title)
   return AsyncStorage.mergeItem(MOBILE_FLASHCARDS_KEY, JSON.stringify({
     [getKeyFromTitle(title)]: {
       title,
@@ -71,6 +72,7 @@ export function addCardToDeck (key, card) {
   return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
     .then((items) => {
       const data = JSON.parse(items)
+      card.timestamp = Date.now()
       data[key].questions.concat([card])
       AsyncStorage.setItem(MOBILE_FLASHCARDS_KEY, JSON.stringify(data))
     })

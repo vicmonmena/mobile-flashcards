@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, Platform } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { white, cyberGrape, black } from '../utils/colors'
-import { saveDeckTitle } from './../utils/helpers'
+import { addCardToDeck } from './../utils/helpers'
 import SubmitButton from './SubmitButton'
 import InputText from './InputText'
 
-class AddDeck extends Component {
+class AddCard extends Component {
 
   state = {
-    title: '',
+    question: '',
+    answer: '',
     error: false
   }
 
@@ -20,26 +21,43 @@ class AddDeck extends Component {
   }
 
   submit = () => {
-    const { title } = this.state
-    if (title !== '') {
-      this.setState({ title: '' })
-      this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
-      saveDeckTitle(title)
+    const { question, answer } = this.state
+    if (question !== '' && answer !== '') {
+      // Bac to Deck View
+      const card = {
+        question,
+        answer,
+      }
+      this.setState({ 
+        question: '',
+        answer: ''
+      })
+      const { deckId } = this.props.navigation.state.params
+      this.props.navigation.dispatch(NavigationActions.back({key: 'AddCard'}))
+      addCardToDeck(deckId, card)
     } else {
-      this.setState({ error: true })
+      
+      this.setState({
+        error: true
+      })
     }
   }
 
   render () {
-    const { title, error} = this.state
+    const { question, answer, error} = this.state
     return (
       <View style={styles.item}>
-        <Text style={styles.title}>What is the title of your new deck?</Text>
         <InputText 
-          onChange={this.handleChange}
-          value={title}
-          name='new-deck'
-          placeholder='Title...'
+          onChange={this.handleChangeQuestion}
+          value={question}
+          name='question'
+          placeholder='Question...'
+        />
+        <InputText 
+          onChange={this.handleChangeAnswer}
+          value={answer}
+          name='answer'
+          placeholder='Answer...'
         />
         <SubmitButton 
           label='SUBMIT'
@@ -49,7 +67,7 @@ class AddDeck extends Component {
         { error &&
           <Text
             style={styles.error}>
-            Please! Be sure you enter the title ...
+            Please! Be sure you enter both, question and answer ...
           </Text>
         }
       </View>
@@ -66,13 +84,6 @@ const styles = StyleSheet.create({
   error: {
     color: cyberGrape,
     textAlign: "center",
-  },
-  title: {
-    textAlign: "center",
-    color: black,
-    fontSize: 22,
-    marginTop: 20,
-    marginBottom: 20,
   },
 })
 
@@ -104,4 +115,4 @@ const buttonStyles = StyleSheet.create({
   },
 })
 
-export default AddDeck
+export default AddCard

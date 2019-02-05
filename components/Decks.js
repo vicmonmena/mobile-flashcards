@@ -11,7 +11,7 @@ import {
 import { AppLoading } from 'expo'
 import { withNavigationFocus } from 'react-navigation'
 import { getDecks, clearAsyncStorage, formatDate } from './../utils/helpers'
-import { white } from '../utils/colors'
+import { white, cyberGrape, silverChalice, black } from '../utils/colors'
 
 class Decks extends Component {
 
@@ -60,9 +60,9 @@ class Decks extends Component {
         <TouchableOpacity onPress={() => this.props.navigation.navigate('DeckDetails',
           { deckId: key }
         )}>
-          <Text>{title}</Text>
-          <Text>{questions ? questions.length : 0} Cards</Text>
-          <Text>Created at: {formatDate(date)}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{questions ? questions.length : 0} Cards</Text>
+          <Text style={styles.date}> Created at {formatDate(date)}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -84,12 +84,15 @@ class Decks extends Component {
           />
         </View>
       )
+    } else {
+      return (
+        <View style={styles.container} >
+          <Text style={styles.noDataText}>
+            There are no Decks! C'mon, Let's create one!
+          </Text>
+        </View>
+      )
     }
-    return (
-      <View>
-        <Text>There are no Decks! C'mon, Let's create one!</Text>
-      </View>
-    )
   }
 }
 
@@ -117,10 +120,24 @@ const styles = StyleSheet.create({
     },
   },
   noDataText: {
+    color: black,
     fontSize: 20,
     paddingTop: 20,
     paddingBottom: 20
-  }
+  },
+  title: {
+    color: black,
+    fontSize: 22,
+  },
+  subtitle: {
+    color: cyberGrape,
+    fontSize: 16,
+  },
+  date: {
+    color: silverChalice,
+    fontSize: 12,
+    marginTop: 20,
+  },
 })
 
 export default withNavigationFocus(Decks)

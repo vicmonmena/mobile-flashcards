@@ -10,7 +10,7 @@ export default function InputText (props) {
     <TextInput
       name={name}
       onChangeText={(text) => onChange(text)}
-      style={styles.root}
+      style={styles.input}
       placeholder={placeholder}
       valu={value}
     />
@@ -24,10 +24,12 @@ InputText.propTypes = {
 }
 
 const styles = StyleSheet.create({
-  root: {
+  input: {
     borderColor: cyberGrape,
     borderWidth: 1,
     height: 40,
     padding: 10,
+    marginLeft: 20,
+    marginRight: 20,
   }
 });
