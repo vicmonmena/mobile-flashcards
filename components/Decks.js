@@ -9,7 +9,6 @@ import {
   Button
 } from 'react-native'
 import { AppLoading } from 'expo'
-import { withNavigationFocus } from 'react-navigation'
 import { getDecks, clearAsyncStorage, formatDate } from './../utils/helpers'
 import { white, cyberGrape, silverChalice, black } from '../utils/colors'
 
@@ -140,4 +139,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default withNavigationFocus(Decks)
+export default Decks

@@ -11,6 +11,8 @@ import { teal, white } from './utils/colors'
 import AddDeck from './components/AddDeck'
 import Decks from './components/Decks'
 import DeckDetails from './components/DeckDetails'
+import AddCard from './components/AddCard'
+import StartQuiz from './components/StartQuiz'
 
 /**
  * Custom status bar
@@ -76,6 +78,24 @@ const DeckNavigator = createStackNavigator({
   },
   DeckDetails: {
     screen: DeckDetails,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: teal,
+      }
+    }
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: teal,
+      }
+    }
+  },
+  StartQuiz: {
+    screen: StartQuiz,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {

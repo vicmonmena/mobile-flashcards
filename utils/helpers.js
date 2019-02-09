@@ -3,7 +3,7 @@ const MOBILE_FLASHCARDS_KEY = 'MobileFlashcards::decks'
 
 const getKeyFromTitle = (title) => {
   const keys = title.trim().split(' ').map(str => (
-    str.charAt(0).toUpperCase()
+    str.charAt(0).toUpperCase() + str.substring(1)
   ))
   return keys.join('')
 }

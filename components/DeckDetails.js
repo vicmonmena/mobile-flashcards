@@ -1,33 +1,9 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { createAppContainer, createStackNavigator } from 'react-navigation'
-import { teal, cyberGrape, white, black, silverChalice } from './../utils/colors'
+import { cyberGrape, white, black, silverChalice } from './../utils/colors'
 import { getDeck } from './../utils/helpers'
 import SubmitButton from './SubmitButton'
-import AddCard from './AddCard'
-import StartQuiz from './StartQuiz'
 
-const DeckNavigator = createStackNavigator({
-  AddCard: {
-    screen: AddCard,
-    navigationOptions: {
-      headerTintColor: white,
-      headerStyle: {
-        backgroundColor: teal,
-      }
-    }
-  },
-  StartQuiz: {
-    screen: StartQuiz,
-    navigationOptions: {
-      headerTintColor: white,
-      headerStyle: {
-        backgroundColor: teal,
-      }
-    }
-  }
-})
-const DeckNavigatorContainer = createAppContainer(DeckNavigator);
 class DeckDetails extends Component {
 
   state = {
@@ -47,19 +23,23 @@ class DeckDetails extends Component {
   }
 
   goTo = (view) => {
+    console.log('goTo: ', view)
     const { deckId } = this.props.navigation.state.params
     switch (view) {
       case 'addCard':
-        this.props.navigation.navigate('AddCard',{ deckId: deckId })
+        console.log('goTo: ', view)
+        this.props.navigation.push('AddCard',{ deckId: deckId })
         break;
       case 'startQuiz':
-        this.props.navigation.navigate('StartQuiz',{ deckId: deckId })
+        console.log('goTo: ', view)
+        this.props.navigation.push('StartQuiz',{ deckId: deckId })
         break;
     } 
   }
 
   render () {
     const { deck } = this.state
+    const { deckId } = this.props.navigation.state.params
     if (deck) {
       return (
         <View style={styles.container}>
@@ -67,16 +47,15 @@ class DeckDetails extends Component {
           <Text style={styles.subtitle}>{deck.questions ? deck.questions.length : 0} Cards</Text>
           <SubmitButton 
             label='Add Card'
-            onPress={this.goTo('addCard')} 
+            onPress={() => this.props.navigation.push('AddCard',{ deckId: deckId })} 
             style={addButtonStyles}
             />
             
           <SubmitButton 
             label='Start Quiz'
-            onPress={this.goTo('startQuiz')} 
+            onPress={() => this.props.navigation.push('StartQuiz',{ deckId: deckId })} 
             style={quizButtonStyles}
             />
-          <DeckNavigatorContainer />
         </View>
       )
     } else {

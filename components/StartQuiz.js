@@ -5,11 +5,11 @@ import { white } from '../utils/colors'
 class StartQuiz extends Component {
 
   render () {
-    const { title , error} = this.state
+    const { deckId } = this.props.navigation.state.params
     return (
       <View style={styles.item}>
         <Text>
-          Quiz for deck: {this.props.navigation.state.params.deckId}
+          Quiz for deck: {deckId}
         </Text>
       </View>
     )
