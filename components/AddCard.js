@@ -14,15 +14,23 @@ class AddCard extends Component {
     error: false
   }
 
-  handleChange = (text) => {
+  handleChangeQuestion = (text) => {
     this.setState({
-      title: text
+      question: text
+    })
+  }
+
+  handleChangeAnswer = (text) => {
+    this.setState({
+      answer: text
     })
   }
 
   submit = () => {
     const { question, answer } = this.state
     if (question !== '' && answer !== '') {
+      console.log('question: ', question)
+      console.log('answer: ', answer)
       // Bac to Deck View
       const card = {
         question,
@@ -33,7 +41,7 @@ class AddCard extends Component {
         answer: ''
       })
       const { deckId } = this.props.navigation.state.params
-      this.props.navigation.dispatch(NavigationActions.back({key: 'AddCard'}))
+      this.props.navigation.goBack()
       addCardToDeck(deckId, card)
     } else {
       
@@ -84,7 +92,7 @@ const styles = StyleSheet.create({
   error: {
     color: cyberGrape,
     textAlign: "center",
-  },
+  }
 })
 
 const buttonStyles = StyleSheet.create({

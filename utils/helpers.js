@@ -73,7 +73,8 @@ export function addCardToDeck (key, card) {
     .then((items) => {
       const data = JSON.parse(items)
       card.timestamp = Date.now()
-      data[key].questions.concat([card])
+      data[key].questions.push(card)
+      console.log('data: ', data)
       AsyncStorage.setItem(MOBILE_FLASHCARDS_KEY, JSON.stringify(data))
     })
 }
