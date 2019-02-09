@@ -1,10 +1,20 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Icon } from 'react-native-elements'
 import { cyberGrape, white, black, silverChalice } from './../utils/colors'
-import { getDeck } from './../utils/helpers'
+import { getDeck, removeDeck } from './../utils/helpers'
 import SubmitButton from './SubmitButton'
 
 class DeckDetails extends Component {
+  
+  static navigationOptions = ({ navigation }) => {
+    
+    const { deckTitle } = navigation.state.params
+    return {
+      title: deckTitle ? deckTitle : 'Error loading view',
+      headerLeft: <Icon name={'arrow-back'} onPress={ () => { navigation.goBack() }} />
+    }
+  }
 
   state = {
     deck: undefined
@@ -22,19 +32,12 @@ class DeckDetails extends Component {
     return this.state.deck !== nextState.deck
   }
 
-  goTo = (view) => {
-    console.log('goTo: ', view)
+  handleDeleteDeck = () => {
+    // TODO: show confirm modal
+    console.log('handleDeleteDeck')
     const { deckId } = this.props.navigation.state.params
-    switch (view) {
-      case 'addCard':
-        console.log('goTo: ', view)
-        this.props.navigation.push('AddCard',{ deckId: deckId })
-        break;
-      case 'startQuiz':
-        console.log('goTo: ', view)
-        this.props.navigation.push('StartQuiz',{ deckId: deckId })
-        break;
-    } 
+    this.props.navigation.goBack()
+    removeDeck(deckId)
   }
 
   render () {
@@ -47,15 +50,23 @@ class DeckDetails extends Component {
           <Text style={styles.subtitle}>{deck.questions ? deck.questions.length : 0} Cards</Text>
           <SubmitButton 
             label='Add Card'
-            onPress={() => this.props.navigation.push('AddCard',{ deckId: deckId })} 
             style={addButtonStyles}
+            onPress={() => this.props.navigation.push('AddCard',{ 
+              deckId: deckId, 
+              deckTitle: deck.title 
+              })}
             />
-            
           <SubmitButton 
             label='Start Quiz'
-            onPress={() => this.props.navigation.push('StartQuiz',{ deckId: deckId })} 
             style={quizButtonStyles}
+            onPress={() => this.props.navigation.push('Quiz',{ 
+              deckId, 
+              deckTitle: deck.title,
+              })} 
             />
+          <TouchableOpacity onPress={this.handleDeleteDeck}>
+            <Text style={styles.delete}>Delete Deck</Text>
+        </TouchableOpacity>
         </View>
       )
     } else {
@@ -83,6 +94,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: silverChalice,
     fontSize: 16,
+  },
+  delete: {
+    fontSize: 16,
+    textAlign: "center",
+    color: cyberGrape,
+    fontWeight: 'bold',
+    marginTop: 20
   }
 })
 
@@ -125,7 +143,7 @@ const quizButtonStyles = StyleSheet.create({
     marginTop: 20
   },
   AndroidSubmitBtn: {
-    backgroundColor: cyberGrape,
+    backgroundColor: black,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,

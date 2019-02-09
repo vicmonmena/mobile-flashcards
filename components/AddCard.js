@@ -1,13 +1,26 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Platform } from 'react-native'
-import { NavigationActions } from 'react-navigation'
-import { white, cyberGrape, black } from '../utils/colors'
+import { View, Text, StyleSheet } from 'react-native'
+import { Icon } from 'react-native-elements'
+import { white, cyberGrape } from '../utils/colors'
 import { addCardToDeck } from './../utils/helpers'
 import SubmitButton from './SubmitButton'
 import InputText from './InputText'
 
 class AddCard extends Component {
 
+  static navigationOptions = ({ navigation }) => {
+    
+    const { deckTitle } = navigation.state.params
+    return {
+      title: 'Add Card',
+      headerLeft: 
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <Icon name={'arrow-back'} onPress={ () => { navigation.goBack() }} />
+          <Text style={{ color: white }} >{deckTitle}</Text>
+        </View>
+    }
+  }
+  
   state = {
     question: '',
     answer: '',
@@ -29,8 +42,6 @@ class AddCard extends Component {
   submit = () => {
     const { question, answer } = this.state
     if (question !== '' && answer !== '') {
-      console.log('question: ', question)
-      console.log('answer: ', answer)
       // Bac to Deck View
       const card = {
         question,

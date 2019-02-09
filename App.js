@@ -12,7 +12,8 @@ import AddDeck from './components/AddDeck'
 import Decks from './components/Decks'
 import DeckDetails from './components/DeckDetails'
 import AddCard from './components/AddCard'
-import StartQuiz from './components/StartQuiz'
+import Quiz from './components/Quiz'
+import Score from './components/Score'
 
 /**
  * Custom status bar
@@ -82,7 +83,10 @@ const DeckNavigator = createStackNavigator({
       headerTintColor: white,
       headerStyle: {
         backgroundColor: teal,
-      }
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
     }
   },
   AddCard: {
@@ -91,16 +95,34 @@ const DeckNavigator = createStackNavigator({
       headerTintColor: white,
       headerStyle: {
         backgroundColor: teal,
-      }
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
     }
   },
-  StartQuiz: {
-    screen: StartQuiz,
+  Quiz: {
+    screen: Quiz,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
         backgroundColor: teal,
-      }
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }
+  },
+  Score: {
+    screen: Score,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: teal,
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
     }
   }
 })

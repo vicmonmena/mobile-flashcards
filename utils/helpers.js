@@ -61,7 +61,7 @@ export function saveDeckTitle (title) {
 }
 
 /**
- * Take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
+ * Take in two arguments, key and card, and will add the card to the list of questions for the deck with the associated key.
  *
  * @export
  * @param {*} key
@@ -75,6 +75,26 @@ export function addCardToDeck (key, card) {
       card.timestamp = Date.now()
       data[key].questions.push(card)
       console.log('data: ', data)
+      AsyncStorage.setItem(MOBILE_FLASHCARDS_KEY, JSON.stringify(data))
+    })
+}
+
+/**
+ * Take in two arguments, key and card, and will add the score to the list the deck with the associated key.
+ *
+ * @export
+ * @param {*} key
+ * @param {*} score
+ * @returns
+ */
+export function addScoreToDeck (key, score) {
+  return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
+    .then((items) => {
+      const data = JSON.parse(items)
+      data[key].quiz = {
+        timestamp: Date.now(),
+        score,
+      }
       AsyncStorage.setItem(MOBILE_FLASHCARDS_KEY, JSON.stringify(data))
     })
 }
