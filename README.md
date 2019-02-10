@@ -2,6 +2,8 @@
 
 Mobile application for Android and iOS platforms that allows users to study collections of flashcards. The app will allow users to create different categories of flashcards called "decks", add flashcards to those decks, then take quizzes on those decks.
 
+This project has been build using `React` and `React Native` (not Redux used).
+
 ## How to run this project
 
 ### First of all
@@ -110,3 +112,7 @@ All this project contents for UI
 ## Notifications
 
 This app checks if the user hasn't completed at least one quiz for that day and generate a notification to remind him/her that.
+
+## Extra modules
+
+For feature `Delete Deck` on `DeckDetails` screen, `react-native-elements` has been import used to build a modal to confirm/cancel deletion. It is motivated by a bug found using Alert/AlertiOS from `react-native` module whick block the UI when the Alert is shown.
