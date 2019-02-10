@@ -23,14 +23,29 @@ class DeckDetails extends Component {
   componentDidMount() {
     // TODO: Fetch deck from state by using Redux instead Asyncstorage
     console.log('componentDidMount')
-    const { deckId } = this.props.navigation.state.params
-    getDeck(deckId).then((item) => (this.setState({
-      deck: item
-    })))
+    this.props.navigation.addListener(
+      'willFocus',
+      payload => {
+        console.log('willFocus')
+        this.fetchDeck()
+      }
+    );
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log('shouldComponentUpdate')
     return this.state.deck !== nextState.deck
+  }
+
+  fetchDeck = () => {
+    const { deckId } = this.props.navigation.state.params
+    getDeck(deckId).then((item) => {
+      console.log('item: ', item)
+      console.log('item.questions.length: ', item.questions.length)
+      this.setState({
+        deck: item
+      })
+    })
   }
 
   handleDeleteDeck = () => {

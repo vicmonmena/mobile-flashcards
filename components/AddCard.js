@@ -52,10 +52,10 @@ class AddCard extends Component {
         answer: ''
       })
       const { deckId } = this.props.navigation.state.params
-      this.props.navigation.goBack()
-      addCardToDeck(deckId, card)
+      addCardToDeck(deckId, card).then(() => {
+        this.props.navigation.goBack()
+      })
     } else {
-      
       this.setState({
         error: true
       })

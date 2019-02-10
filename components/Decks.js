@@ -20,7 +20,14 @@ class Decks extends Component {
   }
 
   componentDidMount() {
-    this.fetchDecks()
+    // console.log('componentDidMount')
+    // this.fetchDecks()
+    this.props.navigation.addListener(
+      'willFocus',
+      payload => {
+        this.fetchDecks()
+      }
+    );
   }
 
   clearAsyncStorage = async() => {
