@@ -85,12 +85,15 @@ npm start
 ```
 
 ### Quiz
+
 ```javascript
 {
   score: 3,
       timestamp: 1495255666921
 },
 ```
+
+- A `quiz` is added to Deck when the user finished the quiz and he/she press `Restart` button on the right side of the header bar.
 
 ## Folders
 
