@@ -4,6 +4,24 @@ Mobile application for Android and iOS platforms that allows users to study coll
 
 ## How to run this project
 
+### First of all
+
+Download dependencies (node_modules)
+
+In a command line/terminal execute:
+
+```
+yarn install
+```
+
+or 
+
+```
+npm install
+```
+
+### Once dependencies are downloaded
+
 In a command line/terminal execute:
 
 ```
