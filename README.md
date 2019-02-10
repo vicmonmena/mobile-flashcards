@@ -115,4 +115,4 @@ This app checks if the user hasn't completed at least one quiz for that day and 
 
 ## Extra modules
 
-For feature `Delete Deck` on `DeckDetails` screen, `react-native-elements` has been import used to build a modal to confirm/cancel deletion. It is motivated by a bug found using Alert/AlertiOS from `react-native` module whick block the UI when the Alert is shown.
+For feature `Delete Deck` on `DeckDetails` screen, `react-native-modal` has been import used to build a modal to confirm/cancel deletion. It is motivated by a bug found using Alert/AlertiOS from `react-native` module whick block the UI when the Alert is shown.
