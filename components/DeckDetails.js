@@ -12,7 +12,7 @@ class DeckDetails extends Component {
     const { deckTitle } = navigation.state.params
     return {
       title: deckTitle ? deckTitle : 'Error loading view',
-      headerLeft: <Icon name={'arrow-back'} onPress={ () => { navigation.goBack() }} />
+      headerLeft: <Icon color={white} name={'arrow-back'} onPress={ () => { navigation.goBack() }} />
     }
   }
 

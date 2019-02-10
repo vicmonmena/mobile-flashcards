@@ -15,7 +15,7 @@ class AddCard extends Component {
       title: 'Add Card',
       headerLeft: 
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <Icon name={'arrow-back'} onPress={ () => { navigation.goBack() }} />
+          <Icon color={white} name={'arrow-back'} onPress={ () => { navigation.goBack() }} />
           <Text style={{ color: white }} >{deckTitle}</Text>
         </View>
     }

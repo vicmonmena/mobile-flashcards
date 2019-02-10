@@ -14,7 +14,7 @@ class Quiz extends Component {
       title: 'Quiz',
       headerLeft: 
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <Icon name={'arrow-back'} onPress={ () => { 
+          <Icon color={white} name={'arrow-back'} onPress={ () => { 
             
             navigation.push('Quiz',
               { 
@@ -23,17 +23,6 @@ class Quiz extends Component {
               })
           }} />
           <Text style={{ color: white }} >{deckTitle}</Text>
-        </View>,
-      headerRight:
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <Icon name={'refresh'} onPress={ () => { 
-            navigation.push('DeckDetails',
-              { 
-                deckId, 
-                deckTitle,
-              })
-           }} />
-          <Text style={{ color: white }}>Restart</Text>
         </View>
     }
   }
