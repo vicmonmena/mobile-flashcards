@@ -1,11 +1,23 @@
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, Alert } from 'react-native'
+import { Notifications, Permissions } from 'expo'
 const MOBILE_FLASHCARDS_KEY = 'MobileFlashcards::decks'
+const NOTIFICATIONS_KEY = 'MobileFlashcards::notifications'
 
 const getKeyFromTitle = (title) => {
   const keys = title.trim().split(' ').map(str => (
     str.charAt(0).toUpperCase() + str.substring(1)
   ))
   return keys.join('')
+}
+
+const checkTimestampIsToday = (timestamp) => {
+  const today = new Date()
+  const aDate = new Date(timestamp)
+  if (today.getUTCFullYear() === aDate.getUTCFullYear() 
+    && today.getUTCMonth() === aDate.getUTCMonth() 
+    && today.getUTCDate() === aDate.getUTCDate())
+    return true
+  return false
 }
 
 export const formatDate = (date) => {
@@ -107,4 +119,92 @@ export function removeDeck (key) {
       delete data[key]
       AsyncStorage.setItem(MOBILE_FLASHCARDS_KEY, JSON.stringify(data))
     })
+}
+
+/** *********** Notifications *********** **/
+
+export function clearLocalNotification () {
+  return AsyncStorage.removeItem(NOTIFICATIONS_KEY)
+    .then(Notifications.cancelAllScheduledNotificationsAsync)
+}
+
+/**
+ * Look for a quiz done today
+ *
+ * @export
+ * @returns
+ */
+export function isTodayLastQuiz() {
+  return getDecks().then((decks) => {
+    if (decks) {
+      const deckList = Object.keys(decks).map((key) => (Object.assign({}, decks[key], { key })))
+      const quizFound = deckList.find(deck => (deck.quiz && checkTimestampIsToday(deck.quiz.timestamp)))
+      console.log('quizFound: ', quizFound)
+      if (quizFound) return true
+      return false
+    }
+    return false
+  })
+}
+
+/**
+ * Notification config
+ *
+ */
+function createNotification () {
+  // Checking if user completed at least one quiz today
+  return {
+    title: 'Complete at least one quiz!',
+    body: "Hey! Complete at least one quiz today!",
+    ios: {
+      sound: true,
+    },
+    android: {
+      sound: true,
+      priority: 'high',
+      sticky: false,
+      vibrate: true,
+    }
+  }
+}
+
+export async function getNotificationPermission() {
+  const { status } = await Permissions.getAsync(
+    Permissions.NOTIFICATIONS
+  );
+  if (status !== 'granted') {
+    console.log('getNotificationPermission')
+    await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  }
+}
+
+/**
+ * Create a notification for in a minute to remind user must do a quiz
+ *
+ * @export
+ */
+export function setLocalNotification () {
+
+  AsyncStorage.getItem(NOTIFICATIONS_KEY)
+    .then(JSON.parse)
+      .then((data) => {
+        // Check if a notification is already created
+        if (data === null) {
+          console.log('setLocalNotification in 5 seconds')
+          Notifications.scheduleLocalNotificationAsync(
+            createNotification(),
+            { time: (new Date()).getTime() + 5000 }
+          )
+          AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(true))
+        }
+      })
+}
+
+export function listenForNotifications() {
+  Notifications.addListener(notification => {
+    console.log('Notification: ', notification.origin)
+    if (notification.origin === 'received') {
+      Alert.alert(notification.title, notification.body);
+    }
+  })
 }

@@ -1,5 +1,10 @@
 import React from 'react';
-import { StyleSheet, StatusBar, View, Platform } from 'react-native';
+import { 
+  StyleSheet, 
+  StatusBar, 
+  View, 
+  Platform
+} from 'react-native';
 import { 
   createAppContainer, 
   createBottomTabNavigator, 
@@ -14,6 +19,12 @@ import DeckDetails from './components/DeckDetails'
 import AddCard from './components/AddCard'
 import Quiz from './components/Quiz'
 import Score from './components/Score'
+import { 
+  setLocalNotification, 
+  isTodayLastQuiz, 
+  getNotificationPermission,
+  listenForNotifications
+} from './utils/helpers'
 
 /**
  * Custom status bar
@@ -130,6 +141,27 @@ const DeckNavigator = createStackNavigator({
 const DeckNavigatorContainer = createAppContainer(DeckNavigator);
 
 export default class App extends React.Component {
+
+  componentWillMount() {
+    console.log('componentWillMount')
+    getNotificationPermission()
+    // listenForNotifications()
+  }
+
+  componentDidMount() {
+    console.log('componentDidMount')
+    isTodayLastQuiz().then((isToday) => {
+      console.log('isTodayLastQuiz: ', isToday)
+      if (!isToday) {
+        console.log('Creating notification...')
+        setLocalNotification()
+      } else {
+        console.log('A quiz was done today!')
+      }
+    })
+    
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>

@@ -187,15 +187,15 @@ const correctButtonStyles = StyleSheet.create({
     marginTop: 20
   },
   AndroidSubmitBtn: {
-    backgroundColor: green,
+    backgroundColor: cyberGrape,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,
     height: 45,
     borderRadius: 2,
-    alignSelf: "flex-end",
-    justifyContent: "center",
-    alignItems: "center"
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 20
   },
   submitBtnText: {
     color: white,
@@ -221,9 +221,9 @@ const incorrectButtonStyles = StyleSheet.create({
     paddingRight: 30,
     height: 45,
     borderRadius: 2,
-    alignSelf: "flex-end",
-    justifyContent: "center",
-    alignItems: "center"
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 20
   },
   submitBtnText: {
     color: white,
