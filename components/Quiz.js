@@ -187,7 +187,7 @@ const correctButtonStyles = StyleSheet.create({
     marginTop: 20
   },
   AndroidSubmitBtn: {
-    backgroundColor: cyberGrape,
+    backgroundColor: green,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,
