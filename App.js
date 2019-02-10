@@ -22,8 +22,7 @@ import Score from './components/Score'
 import { 
   setLocalNotification, 
   isTodayLastQuiz, 
-  getNotificationPermission,
-  listenForNotifications
+  getNotificationPermission
 } from './utils/helpers'
 
 /**
@@ -143,9 +142,7 @@ const DeckNavigatorContainer = createAppContainer(DeckNavigator);
 export default class App extends React.Component {
 
   componentWillMount() {
-    console.log('componentWillMount')
     getNotificationPermission()
-    // listenForNotifications()
   }
 
   componentDidMount() {

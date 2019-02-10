@@ -199,12 +199,3 @@ export function setLocalNotification () {
         }
       })
 }
-
-export function listenForNotifications() {
-  Notifications.addListener(notification => {
-    console.log('Notification: ', notification.origin)
-    if (notification.origin === 'received') {
-      Alert.alert(notification.title, notification.body);
-    }
-  })
-}
