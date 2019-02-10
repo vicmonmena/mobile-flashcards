@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity
+} from 'react-native'
+import Modal from "react-native-modal";
 import { Icon } from 'react-native-elements'
-import { cyberGrape, white, black, silverChalice } from './../utils/colors'
+import { cyberGrape, white, black, silverChalice, red, green } from './../utils/colors'
 import { getDeck, removeDeck } from './../utils/helpers'
 import SubmitButton from './SubmitButton'
 
@@ -17,7 +23,8 @@ class DeckDetails extends Component {
   }
 
   state = {
-    deck: undefined
+    deck: undefined,
+    isModalVisible: false
   }
 
   componentDidMount() {
@@ -32,11 +39,6 @@ class DeckDetails extends Component {
     );
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('shouldComponentUpdate')
-    return this.state.deck !== nextState.deck
-  }
-
   fetchDeck = () => {
     const { deckId } = this.props.navigation.state.params
     getDeck(deckId).then((item) => {
@@ -48,19 +50,39 @@ class DeckDetails extends Component {
     })
   }
 
-  handleDeleteDeck = () => {
+  _toggleModal = () => this.setState({ isModalVisible: !this.state.isModalVisible })
+
+  confirmDeleteDeck = () => {
     // TODO: show confirm modal
     const { deckId } = this.props.navigation.state.params
-    this.props.navigation.goBack()
-    removeDeck(deckId)
+    removeDeck(deckId).then(() => {
+      this.props.navigation.goBack()
+    })
   }
 
   render () {
-    const { deck } = this.state
+    const { deck, isModalVisible } = this.state
     const { deckId } = this.props.navigation.state.params
     if (deck) {
       return (
         <View style={styles.container}>
+          <Modal isVisible={this.state.isModalVisible}>
+            <View style={styles.modal}>
+              <Text style={styles.title} >Are you sure you want to delete this Deck? Take into account all of his cards will be deleted too</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <SubmitButton 
+                  label='YES'
+                  style={confirmButtonStyles}
+                  onPress={this.confirmDeleteDeck}
+                  />
+                <SubmitButton 
+                label='NO'
+                style={cancelButtonStyles}
+                onPress={this._toggleModal}
+                />
+              </View>
+            </View>
+          </Modal>
           <Text style={styles.title}>{deck.title}</Text>
           <Text style={styles.subtitle}>{deck.questions ? deck.questions.length : 0} Cards</Text>
           <SubmitButton 
@@ -79,9 +101,9 @@ class DeckDetails extends Component {
               deckTitle: deck.title,
               })} 
             />
-          <TouchableOpacity onPress={this.handleDeleteDeck}>
+          <TouchableOpacity onPress={this._toggleModal}>
             <Text style={styles.delete}>Delete Deck</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
         </View>
       )
     } else {
@@ -116,6 +138,16 @@ const styles = StyleSheet.create({
     color: cyberGrape,
     fontWeight: 'bold',
     marginTop: 20
+  },
+  modal: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: silverChalice,
+    maxHeight: 200,
+    padding: 10,
+    borderRadius: 2,
   }
 })
 
@@ -159,6 +191,62 @@ const quizButtonStyles = StyleSheet.create({
   },
   AndroidSubmitBtn: {
     backgroundColor: black,
+    padding: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    height: 45,
+    borderRadius: 2,
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 20
+  },
+  submitBtnText: {
+    color: white,
+    fontSize: 22,
+    textAlign: "center"
+  },
+})
+
+const confirmButtonStyles = StyleSheet.create({
+  iosSubmitBtn: {
+    backgroundColor: green,
+    padding: 10,
+    borderRadius: 7,
+    height: 45,
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 20
+  },
+  AndroidSubmitBtn: {
+    backgroundColor: green,
+    padding: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    height: 45,
+    borderRadius: 2,
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 20
+  },
+  submitBtnText: {
+    color: white,
+    fontSize: 22,
+    textAlign: "center"
+  },
+})
+
+const cancelButtonStyles = StyleSheet.create({
+  iosSubmitBtn: {
+    backgroundColor: red,
+    padding: 10,
+    borderRadius: 7,
+    height: 45,
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 20
+  },
+  AndroidSubmitBtn: {
+    backgroundColor: red,
     padding: 10,
     paddingLeft: 30,
     paddingRight: 30,
