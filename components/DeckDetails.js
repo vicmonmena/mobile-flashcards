@@ -22,6 +22,7 @@ class DeckDetails extends Component {
 
   componentDidMount() {
     // TODO: Fetch deck from state by using Redux instead Asyncstorage
+    console.log('componentDidMount')
     const { deckId } = this.props.navigation.state.params
     getDeck(deckId).then((item) => (this.setState({
       deck: item
@@ -34,7 +35,6 @@ class DeckDetails extends Component {
 
   handleDeleteDeck = () => {
     // TODO: show confirm modal
-    console.log('handleDeleteDeck')
     const { deckId } = this.props.navigation.state.params
     this.props.navigation.goBack()
     removeDeck(deckId)

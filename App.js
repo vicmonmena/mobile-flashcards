@@ -146,14 +146,9 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
     isTodayLastQuiz().then((isToday) => {
-      console.log('isTodayLastQuiz: ', isToday)
       if (!isToday) {
-        console.log('Creating notification...')
         setLocalNotification()
-      } else {
-        console.log('A quiz was done today!')
       }
     })
     

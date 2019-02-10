@@ -81,12 +81,9 @@ class Quiz extends Component {
 
   render () {
     const { deck, showAnswer, questionIndex } = this.state
-    console.log('questionIndex: ', questionIndex)
     if (deck) {
-      console.log('deck: ', deck)
       if (deck.questions && deck.questions.length > 0) {
         const { questions } = deck
-        console.log('questions: ', questions)
         return (
           <View style={styles.container}>
             <Text style={styles.counter}>

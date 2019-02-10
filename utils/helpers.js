@@ -62,7 +62,6 @@ export function getDeck (key) {
  * @returns
  */
 export function saveDeckTitle (title) {
-  console.log(title)
   return AsyncStorage.mergeItem(MOBILE_FLASHCARDS_KEY, JSON.stringify({
     [getKeyFromTitle(title)]: {
       title,
@@ -86,7 +85,6 @@ export function addCardToDeck (key, card) {
       const data = JSON.parse(items)
       card.timestamp = Date.now()
       data[key].questions.push(card)
-      console.log('data: ', data)
       AsyncStorage.setItem(MOBILE_FLASHCARDS_KEY, JSON.stringify(data))
     })
 }
@@ -139,7 +137,6 @@ export function isTodayLastQuiz() {
     if (decks) {
       const deckList = Object.keys(decks).map((key) => (Object.assign({}, decks[key], { key })))
       const quizFound = deckList.find(deck => (deck.quiz && checkTimestampIsToday(deck.quiz.timestamp)))
-      console.log('quizFound: ', quizFound)
       if (quizFound) return true
       return false
     }
@@ -173,7 +170,6 @@ export async function getNotificationPermission() {
     Permissions.NOTIFICATIONS
   );
   if (status !== 'granted') {
-    console.log('getNotificationPermission')
     await Permissions.askAsync(Permissions.NOTIFICATIONS);
   }
 }
@@ -190,7 +186,6 @@ export function setLocalNotification () {
       .then((data) => {
         // Check if a notification is already created
         if (data === null) {
-          console.log('setLocalNotification in 5 seconds')
           Notifications.scheduleLocalNotificationAsync(
             createNotification(),
             { time: (new Date()).getTime() + 5000 }
